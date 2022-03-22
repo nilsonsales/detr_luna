@@ -1,8 +1,8 @@
 # DETR LUNA
 Fork of DETR using LUNA16 lung cancer dataset
 
-# Training the model
-To run the model, put the images and annotations in COCO format in the `dataset/` folder in the following structure:
+## Configuring the environment
+Doenload the images and annotations from [this link](https://drive.google.com/drive/folders/1OV2L7uz6oF4ac_XOd5iDsUWiG1eVaSN1?usp=sharing) and extract them to the `dataset/` directory, in the following structure:
 ```shell
 luna_images/
 luna_images_seg/
@@ -19,7 +19,10 @@ conda activate DETR
 pip install -r detr/requirements.txt
 ```
 
+## Training the model
 Run the `main.py` code from within the detr directory:
 ```console
 python main.py --device cuda --dataset_file luna --data_path ../dataset/ --output_dir output --resume output/checkpoint.pth --batch_size 16 --epochs 20
 ```
+
+The *--resume* to continue the training from a pre-trained model.
