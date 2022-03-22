@@ -25,4 +25,4 @@ Run the `main.py` code from within the detr directory:
 python main.py --device cuda --dataset_file luna --data_path ../dataset/ --output_dir output --resume output/checkpoint.pth --batch_size 16 --epochs 20
 ```
 
-The *--resume* to continue the training from a pre-trained model.
+Use the *--resume* option to continue the training from a pre-trained model. A checkpoint file trained on 10 epochs can be found in the link above.
