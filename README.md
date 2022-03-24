@@ -1,5 +1,5 @@
 # DETR LUNA
-Fork of DETR using LUNA16 lung cancer dataset
+Fork of Facebook's [DETR](https://github.com/facebookresearch/detr/) using [LUNA16](https://luna16.grand-challenge.org/) lung cancer dataset.
 
 ## Configuring the environment
 1. Download the images and annotations from [this link](https://drive.google.com/drive/folders/1OV2L7uz6oF4ac_XOd5iDsUWiG1eVaSN1?usp=sharing) and extract them to the `dataset/` directory, in the following structure:
@@ -25,7 +25,7 @@ pip install -r detr/requirements.txt
 ## Training the model
 Run the `main.py` code from within the detr directory:
 ```console
-python main.py --device cuda --dataset_file luna --data_path ../dataset/ --output_dir output --resume weights/detr-r50-e632da11.pth --batch_size 16 --epochs 20
+python main.py --device cuda --dataset_file luna --data_path ../dataset/ --output_dir output --resume weights/detr-r50-e632da11.pth --batch_size 16 --epochs 100
 ```
 
 We start the training using the pre-trained weights given in the repo. After training our model, we can continue further epochs refering to our own checkpoint file as `--resume output/checkpoint.pth`.
