@@ -1,5 +1,8 @@
 # DETR LUNA
-Fork of Facebook's [DETR](https://github.com/facebookresearch/detr/) using [LUNA16](https://luna16.grand-challenge.org/) lung cancer dataset.
+Fork of Facebook's [DETR](https://github.com/facebookresearch/detr/) Object Detection with Transformers model using the [LUNA16](https://luna16.grand-challenge.org/) lung cancer dataset.
+
+## Description
+This fork uses 2D CT scan images extracted from the LUNA16 lung cancer dataset. The original LUNA16 dataset contains 3D CT scan objects. For this work, these objects were converted to 2D 512x512 images. Some data-augmentation techniques were used, giving us around 4,000 images with one of more lung nodules.
 
 ## Configuring the environment
 1. Download the images and annotations from [this link](https://drive.google.com/drive/folders/1OV2L7uz6oF4ac_XOd5iDsUWiG1eVaSN1?usp=sharing) and extract them to the `dataset/` directory, in the following structure:
