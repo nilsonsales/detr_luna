@@ -128,8 +128,8 @@ def make_luna_transforms(image_set):
             T.RandomSelect(
                 T.RandomResize(scales, max_size=512),
                 T.Compose([
-                    T.RandomResize([128,256,512]),
-                    T.RandomSizeCrop(32, 128),
+                    T.RandomResize([128,256,400,512]),
+                    T.RandomSizeCrop(64, 256),
                     T.RandomResize(scales, max_size=512),
                 ])
             ),
@@ -152,6 +152,9 @@ def build(image_set, args):
     assert root.exists(), f'provided LUNA path {root} does not exist'
     mode = 'instances'
     PATHS = {
+        #"train": (root / "luna_images", root / f'train.json'),
+        #"val": (root / "luna_images", root / f'test.json'),
+        # Segmented lungs
         "train": (root / "luna_images_seg", root / f'train_seg.json'),
         "val": (root / "luna_images_seg", root / f'test_seg.json'),
     }
