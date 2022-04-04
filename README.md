@@ -7,8 +7,10 @@ This fork uses 2D CT scan images extracted from the LUNA16 lung cancer dataset. 
 ## Configuring the environment
 1. Download the images and annotations from [this link](https://drive.google.com/drive/folders/1OV2L7uz6oF4ac_XOd5iDsUWiG1eVaSN1?usp=sharing) and extract them to the `dataset/` directory, in the following structure:
 ```shell
-luna_images/
-luna_images_seg/
+luna_images_test/
+luna_images_train/
+luna_images_seg_test/
+luna_images_seg_train/
 test.json
 test_seg.json
 train.json
