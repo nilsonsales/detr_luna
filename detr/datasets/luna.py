@@ -120,17 +120,17 @@ def make_luna_transforms(image_set):
     ])
 
     #scales = [480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800]
-    scales = [64, 128, 180, 256, 360, 480, 512]
+    scales = [400, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800]
 
     if image_set == 'train':
         return T.Compose([
             T.RandomHorizontalFlip(),
             T.RandomSelect(
-                T.RandomResize(scales, max_size=512),
+                T.RandomResize(scales, max_size=1333),
                 T.Compose([
-                    T.RandomResize([128,256,400,512]),
-                    T.RandomSizeCrop(64, 256),
-                    T.RandomResize(scales, max_size=512),
+                    T.RandomResize([400,500,600]),
+                    T.RandomSizeCrop(384, 600),
+                    T.RandomResize(scales, max_size=1333),
                 ])
             ),
             #T.RandomResize(scales, max_size=512),
@@ -140,7 +140,7 @@ def make_luna_transforms(image_set):
     if image_set == 'val':
         return T.Compose([
             #T.RandomResize([800], max_size=1333),
-            T.RandomResize([512], max_size=512),
+            T.RandomResize([512], max_size=1333),
             normalize,
         ])
 
@@ -152,11 +152,11 @@ def build(image_set, args):
     assert root.exists(), f'provided LUNA path {root} does not exist'
     mode = 'instances'
     PATHS = {
-        #"train": (root / "luna_images", root / f'train.json'),
-        #"val": (root / "luna_images", root / f'test.json'),
+        #"train": (root / "luna_images_train", root / f'train.json'),
+        #"val": (root / "luna_images_test", root / f'test.json'),
         # Segmented lungs
-        "train": (root / "luna_images_seg", root / f'train_seg.json'),
-        "val": (root / "luna_images_seg", root / f'test_seg.json'),
+        "train": (root / "luna_images_seg_train", root / f'train_seg.json'),
+        "val": (root / "luna_images_seg_test", root / f'test_seg.json'),
     }
 
     img_folder, ann_file = PATHS[image_set]
