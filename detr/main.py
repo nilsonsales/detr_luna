@@ -180,7 +180,8 @@ def main(args):
         # Delete some of the weights to match the number of expected classes
         del checkpoint['model']['class_embed.weight']
         del checkpoint['model']['class_embed.bias']
-        del checkpoint['model']['query_embed.weight']
+        if args.num_queries != 100:
+            del checkpoint['model']['query_embed.weight']
 
         model_without_ddp.load_state_dict(checkpoint['model'], strict=False)
         if not args.eval and 'optimizer' in checkpoint and 'lr_scheduler' in checkpoint and 'epoch' in checkpoint:
