@@ -113,14 +113,13 @@ class ConvertLunaPolysToMask(object):
 
 
 def make_luna_transforms(image_set):
-
     normalize = T.Compose([
         T.ToTensor(),
         T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
 
-    #scales = [480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800]
-    scales = [400, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800]
+    # scales = [480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800]
+    scales = [400, 480, 512, 544, 576, 608, 640, 672, 704, 800]
 
     if image_set == 'train':
         return T.Compose([
@@ -128,19 +127,19 @@ def make_luna_transforms(image_set):
             T.RandomSelect(
                 T.RandomResize(scales, max_size=1333),
                 T.Compose([
-                    T.RandomResize([400,500,600]),
-                    T.RandomSizeCrop(384, 600),
+                    T.RandomResize([400, 480, 500]),
+                    T.RandomSizeCrop(384, 500),
                     T.RandomResize(scales, max_size=1333),
                 ])
             ),
-            #T.RandomResize(scales, max_size=512),
+            # T.RandomResize(scales, max_size=512),
             normalize,
         ])
 
     if image_set == 'val':
         return T.Compose([
-            #T.RandomResize([800], max_size=1333),
-            T.RandomResize([512], max_size=1333),
+            T.RandomResize([800], max_size=1333),
+            # T.RandomResize([672], max_size=1333),
             normalize,
         ])
 
@@ -152,11 +151,21 @@ def build(image_set, args):
     assert root.exists(), f'provided LUNA path {root} does not exist'
     mode = 'instances'
     PATHS = {
-        #"train": (root / "luna_images_train", root / f'train.json'),
-        #"val": (root / "luna_images_test", root / f'test.json'),
+        # Non segmented
+        # "train": (root / "luna_images_train", root / f'train.json'),
+        # "val": (root / "luna_images_test", root / f'test.json'),
+
         # Segmented lungs
-        "train": (root / "luna_images_seg_train", root / f'train_seg.json'),
-        "val": (root / "luna_images_seg_test", root / f'test_seg.json'),
+        # "train": (root / "luna_images_seg_train", root / f'train_seg.json'),
+        # "val": (root / "luna_images_seg_test", root / f'test_seg.json'),
+
+        # Using different HU values (larger window)
+        "train": (root / "dataset2_train", root / f'dataset2_train.json'),
+        "val": (root / "dataset2_test", root / f'dataset2_test.json')
+
+        # Using different HU values (larger window) Seg
+        # "train": (root / "dataset2_seg_train", root / f'dataset2_seg_train.json'),
+        # "val": (root / "dataset2_seg_test", root / f'dataset2_seg_test.json')
     }
 
     img_folder, ann_file = PATHS[image_set]
