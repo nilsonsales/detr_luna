@@ -52,10 +52,12 @@ def plot_logs(logs, fields=('class_error', 'loss_bbox_unscaled', 'mAP'), ewm_col
     # load log file(s) and plot
     dfs = [pd.read_json(Path(p) / log_name, lines=True) for p in logs]
 
-    fig, axs = plt.subplots(ncols=len(fields), figsize=(21, 6))
+    fig, axs = plt.subplots(nrows=len(fields), figsize=(8, 21))#plt.subplots(ncols=len(fields), figsize=(21, 6))
 
     for df, color in zip(dfs, sns.color_palette(n_colors=len(logs))):
         for j, field in enumerate(fields):
+            axs[j].set_xlabel('Epochs')
+
             if field == 'mAP':
                 coco_eval = pd.DataFrame(
                     np.stack(df.test_coco_eval_bbox.dropna().values)[:, 1]
@@ -102,7 +104,7 @@ def plot_precision_recall(files, naming_scheme='iter'):
         names = [f.stem for f in files]
     else:
         raise ValueError(f'not supported {naming_scheme}')
-    fig, axs = plt.subplots(ncols=2, figsize=(16, 5))
+    fig, axs = plt.subplots(ncols=1, figsize=(8, 6))
     for f, color, name in zip(files, sns.color_palette("Blues", n_colors=len(files)), names):
         data = torch.load(f)
         # precision is n_iou, n_points, n_cat, n_area, max_det
@@ -119,11 +121,19 @@ def plot_precision_recall(files, naming_scheme='iter'):
               f'recall={rec:0.3f}, ' +
               f'f1={2 * prec * rec / (prec + rec + 1e-8):0.3f}'
               )
-        axs[0].plot(recall, precision, c=color)
-        axs[1].plot(recall, scores, c=color)
+        #axs[0].plot(recall, precision, c=color)
+        axs.plot(recall, precision, c=color)
+        #axs[1].plot(recall, scores, c=color)
 
-    axs[0].set_title('Precision / Recall')
-    axs[0].legend(names)
-    axs[1].set_title('Scores / Recall')
-    axs[1].legend(names)
+    # axs[0].set_title('Precision-Recall')
+    # axs[0].legend(names, title='Epochs')
+    # axs[0].set_xlabel('Recall')
+    # axs[0].set_ylabel('Precision')
+    axs.set_title('Precision-Recall')
+    axs.legend(names, title='Epochs')
+    axs.set_xlabel('Recall')
+    axs.set_ylabel('Precision')
+
+    # axs[1].set_title('Scores / Recall')
+    # axs[1].legend(names, title='Epochs')
     return fig, axs
