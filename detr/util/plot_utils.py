@@ -52,7 +52,7 @@ def plot_logs(logs, fields=('class_error', 'loss_bbox_unscaled', 'mAP'), ewm_col
     # load log file(s) and plot
     dfs = [pd.read_json(Path(p) / log_name, lines=True) for p in logs]
 
-    fig, axs = plt.subplots(ncols=len(fields), figsize=(16, 5))
+    fig, axs = plt.subplots(ncols=len(fields), figsize=(21, 6))
 
     for df, color in zip(dfs, sns.color_palette(n_colors=len(logs))):
         for j, field in enumerate(fields):
@@ -61,9 +61,24 @@ def plot_logs(logs, fields=('class_error', 'loss_bbox_unscaled', 'mAP'), ewm_col
                     np.stack(df.test_coco_eval_bbox.dropna().values)[:, 1]
                 ).ewm(com=ewm_col).mean()
                 axs[j].plot(coco_eval, c=color, alpha=0.8)
-            elif field == 'mAP_small':
+            elif field == 'mAP_0.50:0.95':
+                coco_eval = pd.DataFrame(
+                    np.stack(df.test_coco_eval_bbox.dropna().values)[:, 0]
+                ).ewm(com=ewm_col).mean()
+                axs[j].plot(coco_eval, c=color, alpha=0.8)
+            elif field == 'mAP_0.50:0.95_s':
                 coco_eval = pd.DataFrame(
                     np.stack(df.test_coco_eval_bbox.dropna().values)[:, 3]
+                ).ewm(com=ewm_col).mean()
+                axs[j].plot(coco_eval, c=color, alpha=0.8)
+            elif field == 'mAP_0.75':
+                coco_eval = pd.DataFrame(
+                    np.stack(df.test_coco_eval_bbox.dropna().values)[:, 2]
+                ).ewm(com=ewm_col).mean()
+                axs[j].plot(coco_eval, c=color, alpha=0.8)
+            elif field == 'mAR_10':
+                coco_eval = pd.DataFrame(
+                    np.stack(df.test_coco_eval_bbox.dropna().values)[:, 7] #8
                 ).ewm(com=ewm_col).mean()
                 axs[j].plot(coco_eval, c=color, alpha=0.8)
             else:
@@ -100,7 +115,8 @@ def plot_precision_recall(files, naming_scheme='iter'):
         prec = precision.mean()
         rec = data['recall'][0, :, 0, -1].mean()
         print(f'{naming_scheme} {name}: mAP@50={prec * 100: 05.1f}, ' +
-              f'score={scores.mean():0.3f}, ' +
+              #f'score={scores.mean():0.3f}, ' +
+              f'recall={rec:0.3f}, ' +
               f'f1={2 * prec * rec / (prec + rec + 1e-8):0.3f}'
               )
         axs[0].plot(recall, precision, c=color)
